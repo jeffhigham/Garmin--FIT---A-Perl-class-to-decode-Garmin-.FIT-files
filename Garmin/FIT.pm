@@ -3,7 +3,6 @@ package Garmin::FIT;
 use FileHandle;
 use POSIX qw(BUFSIZ);
 use Time::Local;
-use UNIVERSAL qw(isa);
 
 require Exporter;
 @ISA = qw(Exporter);
@@ -411,7 +410,7 @@ sub clear_buffer {
     if ($self->cp_fit) {
       my $FH = $self->cp_fit_FH;
 
-      if (isa($FH, 'FileHandle') && $FH->opened) {
+      if ($FH->isa('FileHandle') && $FH->opened) {
 	my $buffer = $self->buffer;
 
 	$FH->print(substr($$buffer, 0, $self->offset));
@@ -3069,7 +3068,7 @@ sub close {
   my $cp_fit_FH = $self->cp_fit_FH;
   my $FH = $self->FH;
 
-  $cp_fit_FH->close if isa($cp_fit_FH, 'FileHandle') && $cp_fit_FH->opened;
+  $cp_fit_FH->close if ref $cp_fit_FH && $cp_fit_FH->isa('FileHandle') && $cp_fit_FH->opened;
   $FH->close if $FH->opened;
 }
 
